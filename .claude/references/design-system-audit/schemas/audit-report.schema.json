@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AuditReport",
+  "description": "Design system compliance audit report for a Figma file or frame.",
+  "type": "object",
+  "required": ["target", "date", "scope", "score", "summary", "frames"],
+  "additionalProperties": false,
+  "properties": {
+    "target": {
+      "type": "string",
+      "description": "Figma URL of the audited file or frame"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["frame", "file"],
+      "description": "Whether the audit covered a single frame or the entire file"
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall compliance score (0–100)"
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total_elements", "compliant", "critical_count", "warning_count", "suggestion_count"],
+      "additionalProperties": false,
+      "properties": {
+        "total_elements": { "type": "integer" },
+        "compliant": { "type": "integer" },
+        "critical_count": { "type": "integer" },
+        "warning_count": { "type": "integer" },
+        "suggestion_count": { "type": "integer" }
+      }
+    },
+    "frames": {
+      "type": "array",
+      "description": "Per-frame audit results",
+      "items": {
+        "type": "object",
+        "required": ["frame_name", "figma_url", "score", "issues"],
+        "additionalProperties": false,
+        "properties": {
+          "frame_name": { "type": "string" },
+          "figma_url": { "type": "string" },
+          "score": { "type": "number", "minimum": 0, "maximum": 100 },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["severity", "category", "layer", "issue"],
+              "additionalProperties": false,
+              "properties": {
+                "severity": {
+                  "type": "string",
+                  "enum": ["critical", "warning", "suggestion"]
+                },
+                "category": {
+                  "type": "string",
+                  "enum": ["component", "token", "naming", "freshness"]
+                },
+                "layer": {
+                  "type": "string",
+                  "description": "Layer name or path where the issue was found"
+                },
+                "issue": {
+                  "type": "string",
+                  "description": "Description of the problem"
+                },
+                "fix": {
+                  "type": "string",
+                  "description": "Recommended correction"
+                },
+                "auto_correctable": {
+                  "type": "boolean",
+                  "description": "Whether use_figma can fix this automatically (requires Full seat)"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

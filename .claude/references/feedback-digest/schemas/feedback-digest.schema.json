@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FeedbackDigest",
+  "description": "Structured digest of Figma comments for a file or frame.",
+  "type": "object",
+  "required": ["figma_url", "period", "date", "summary", "frames"],
+  "additionalProperties": false,
+  "properties": {
+    "figma_url": {
+      "type": "string",
+      "description": "Figma URL of the audited file"
+    },
+    "period": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "format": "date" },
+        "to": { "type": "string", "format": "date" }
+      }
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the digest was generated"
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total", "blockers", "changes_requested", "questions", "approvals"],
+      "additionalProperties": false,
+      "properties": {
+        "total": { "type": "integer" },
+        "blockers": { "type": "integer" },
+        "changes_requested": { "type": "integer" },
+        "questions": { "type": "integer" },
+        "approvals": { "type": "integer" },
+        "unanswered_questions": { "type": "integer" }
+      }
+    },
+    "frames": {
+      "type": "array",
+      "description": "Comments grouped by frame",
+      "items": {
+        "type": "object",
+        "required": ["frame_name", "comments"],
+        "additionalProperties": false,
+        "properties": {
+          "frame_name": { "type": "string" },
+          "figma_url": { "type": "string" },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "author", "type", "text", "date"],
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string" },
+                "author": { "type": "string" },
+                "author_role": {
+                  "type": "string",
+                  "description": "Inferred role: design | product | engineering | other"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["blocker", "change_requested", "question", "approval", "info"]
+                },
+                "text": { "type": "string" },
+                "date": { "type": "string", "format": "date" },
+                "resolved": { "type": "boolean" },
+                "reply_count": { "type": "integer" },
+                "needs_decision": {
+                  "type": "boolean",
+                  "description": "True if the comment poses a question with no reply"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

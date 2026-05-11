@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HandoffSpec",
+  "description": "Technical handoff specification generated from a Figma frame.",
+  "type": "object",
+  "required": ["screen_name", "figma_url", "date", "status", "components", "tokens", "states", "accessibility"],
+  "additionalProperties": false,
+  "properties": {
+    "screen_name": {
+      "type": "string",
+      "description": "Human-readable name of the screen or feature (e.g. 'Checkout — Default')"
+    },
+    "figma_url": {
+      "type": "string",
+      "description": "Full Figma URL including node-id"
+    },
+    "figma_file": {
+      "type": "string",
+      "description": "Figma file name"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date of spec generation (YYYY-MM-DD)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ready_for_dev", "in_review", "blocked"],
+      "description": "Handoff status"
+    },
+    "components": {
+      "type": "array",
+      "description": "List of component instances in the frame",
+      "items": {
+        "type": "object",
+        "required": ["figma_name", "variant", "code_path"],
+        "additionalProperties": false,
+        "properties": {
+          "figma_name": {
+            "type": "string",
+            "description": "Figma component name (e.g. 'DS/Button')"
+          },
+          "variant": {
+            "type": "string",
+            "description": "Variant name or properties (e.g. 'Primary', 'size=lg/state=default')"
+          },
+          "code_path": {
+            "type": "string",
+            "description": "Relative path in the codebase, or 'not mapped' if no Code Connect entry"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional notes about usage or customization"
+          }
+        }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "description": "Design tokens applied in the frame",
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "token", "value"],
+            "properties": {
+              "element": { "type": "string" },
+              "token": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        },
+        "spacing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "token", "value"],
+            "properties": {
+              "element": { "type": "string" },
+              "token": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        },
+        "typography": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "token", "value"],
+            "properties": {
+              "element": { "type": "string" },
+              "token": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        },
+        "hardcoded_violations": {
+          "type": "array",
+          "description": "Non-compliant hard-coded values that should use tokens",
+          "items": {
+            "type": "object",
+            "required": ["element", "current_value", "recommended_token"],
+            "properties": {
+              "element": { "type": "string" },
+              "current_value": { "type": "string" },
+              "recommended_token": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "states": {
+      "type": "array",
+      "description": "Screen states identified across sibling frames or component variants",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "State name (e.g. 'Default', 'Loading', 'Error', 'Empty')"
+          },
+          "figma_url": {
+            "type": "string",
+            "description": "URL of the frame representing this state (optional if inline variant)"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "description": "Accessibility issues found in the frame",
+      "additionalProperties": false,
+      "properties": {
+        "critical": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "issue", "fix"],
+            "properties": {
+              "element": { "type": "string" },
+              "issue": { "type": "string" },
+              "fix": { "type": "string" }
+            }
+          }
+        },
+        "warning": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "issue"],
+            "properties": {
+              "element": { "type": "string" },
+              "issue": { "type": "string" },
+              "recommendation": { "type": "string" }
+            }
+          }
+        },
+        "suggestion": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "observation"],
+            "properties": {
+              "element": { "type": "string" },
+              "observation": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "description": "Unresolved questions that affect implementation",
+      "items": {
+        "type": "object",
+        "required": ["question"],
+        "properties": {
+          "question": { "type": "string" },
+          "owner": { "type": "string" },
+          "raised_by": { "type": "string" }
+        }
+      }
+    }
+  }
+}

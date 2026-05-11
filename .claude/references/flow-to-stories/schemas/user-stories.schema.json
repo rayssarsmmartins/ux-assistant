@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserStoriesOutput",
+  "description": "User stories and acceptance criteria derived from a FigJam flow diagram.",
+  "type": "object",
+  "required": ["figjam_url", "date", "epic", "stories"],
+  "additionalProperties": false,
+  "properties": {
+    "figjam_url": {
+      "type": "string",
+      "description": "URL of the source FigJam diagram"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "epic": {
+      "type": "string",
+      "description": "Name of the epic or feature this flow belongs to"
+    },
+    "flow_summary": {
+      "type": "string",
+      "description": "One-paragraph description of what the flow does"
+    },
+    "actors": {
+      "type": "array",
+      "description": "User roles or systems that participate in the flow",
+      "items": { "type": "string" }
+    },
+    "stories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "actor", "action", "benefit", "acceptance_criteria"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Story identifier (e.g. US-01)"
+          },
+          "actor": {
+            "type": "string",
+            "description": "Who performs the action (e.g. 'comprador', 'usuário logado')"
+          },
+          "action": {
+            "type": "string",
+            "description": "What the actor wants to do"
+          },
+          "benefit": {
+            "type": "string",
+            "description": "Why the actor wants to do it (the outcome)"
+          },
+          "figjam_node_id": {
+            "type": "string",
+            "description": "FigJam node ID that originated this story (for traceability)"
+          },
+          "path_type": {
+            "type": "string",
+            "enum": ["happy_path", "alternative", "error"],
+            "description": "Whether this story covers the main flow, an alternative, or an error state"
+          },
+          "acceptance_criteria": {
+            "type": "array",
+            "description": "EARS-style criteria: Given/When/Then",
+            "items": {
+              "type": "object",
+              "required": ["given", "when", "then"],
+              "additionalProperties": false,
+              "properties": {
+                "given": { "type": "string" },
+                "when": { "type": "string" },
+                "then": { "type": "string" }
+              }
+            }
+          },
+          "open_questions": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

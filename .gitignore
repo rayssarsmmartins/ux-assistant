@@ -1,0 +1,19 @@
+# Credenciais e ambiente
+.env
+.env.local
+.env.*.local
+
+# Artefatos de runtime
+/tmp/
+
+# Claude Code — configurações locais (não compartilháveis)
+.claude/settings.local.json
+
+# macOS
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
